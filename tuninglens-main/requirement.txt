@@ -1,2 +1,7 @@
 evalplus[vllm]
 ms-swift
+transformers
+peft
+torch
+sentencepiece
+safetensors

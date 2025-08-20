@@ -19,6 +19,10 @@ MODEL_TYPES=(
     # qwen2_5
 )
 
+DATASET_PATH=${DATASET_PATH:-../models_2410-combined.jsonl}
+# For a quick smoke test, you can override before running:
+#   DATASET_PATH=../one_example.jsonl bash train.sh
+
 export PYTHONPATH=$PYTHONPATH:$(pwd)/plugins  
 for i in "${!MODELS[@]}"; do
     MODEL="${MODELS[$i]}"
@@ -49,7 +53,7 @@ for i in "${!MODELS[@]}"; do
         --model_type $MODEL_TYPE \
         --loss_type dft \
         --external_plugins plugins/dft_loss.py \
-        --dataset ####TODO put dataset directory here combined.jsonl \
+        --dataset "$DATASET_PATH" \
         --gradient_checkpointing_kwargs '{"use_reentrant": false}' \
         --torch_dtype bfloat16 \
         --num_train_epochs 1 \

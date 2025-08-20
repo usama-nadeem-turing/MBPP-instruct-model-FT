@@ -48,8 +48,6 @@ for i in "${!MODELS[@]}"; do
     TORCHDYNAMO_CAPTURE_SCALAR_OUTPUTS=1 \
     swift sft \
         --model $MODEL \
-        --use_hf True \
-        --train_type lora \
         --model_type $MODEL_TYPE \
         --loss_type dft \
         --external_plugins plugins/dft_loss.py \
@@ -73,18 +71,15 @@ for i in "${!MODELS[@]}"; do
         --logging_steps 5 \
         --max_length 15000 \
         --output_dir $OUTPUT_DIR \
-        --warmup_ratio 0.05 \
         --dataloader_num_workers 4 \
-        --truncation_strategy 'right' \
-        --torch_dtype bfloat16 \
         --seed 44 \
         --data_seed 44 \
         --split_dataset_ratio 0.05 \
-        --dataset_shuffle true \
         --report_to tensorboard \
         --logging_first_step true \
-        --logging_steps 1 \
-        --attn_impl $ATTN_IMPL
+        --attn_impl $ATTN_IMPL \
+        --truncation_strategy 'right' \
+        --dataset_shuffle true
 
     python3 lora_to_full.py $OUTPUT_DIR --last
     

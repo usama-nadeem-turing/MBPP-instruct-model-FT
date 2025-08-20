@@ -19,7 +19,7 @@ MODEL_TYPES=(
     # qwen2_5
 )
 
-DATASET_PATH=${DATASET_PATH:-../models_2410-combined.jsonl}
+DATASET_PATH=${DATASET_PATH:-../../models_2410-combined.jsonl}
 # For a quick smoke test, you can override before running:
 #   DATASET_PATH=../one_example.jsonl bash train.sh
 

@@ -27,7 +27,7 @@ export PYTHONPATH=$PYTHONPATH:$(pwd)/plugins
 for i in "${!MODELS[@]}"; do
     MODEL="${MODELS[$i]}"
     MODEL_TYPE="${MODEL_TYPES[$i]}"
-    nproc_per_node=2
+    nproc_per_node=1
     MODEL_NAME=$(basename "$MODEL")
     OUTPUT_DIR=models/${MODEL_NAME}/2410-dft
     SAVE_STEPS=10
@@ -40,7 +40,7 @@ for i in "${!MODELS[@]}"; do
     fi
 
     PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
-    CUDA_VISIBLE_DEVICES=0,1 \
+    CUDA_VISIBLE_DEVICES=0 \
     NPROC_PER_NODE=$nproc_per_node \
     TORCHDYNAMO_RECOMPILE_LIMIT=16 \
     TORCHDYNAMO_CACHE_SIZE_LIMIT=16 \

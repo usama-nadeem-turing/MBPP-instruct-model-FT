@@ -7,5 +7,5 @@ safetensors>=0.4.2
 datasets>=2.20
 tensorboard>=2.14
 ms-swift
-evalplus>=0.3.2; platform_system == "Windows"
-evalplus[vllm]>=0.3.2; platform_system != "Windows"
+evalplus>=0.3.1; platform_system == "Windows"
+evalplus[vllm]>=0.3.1; platform_system != "Windows"

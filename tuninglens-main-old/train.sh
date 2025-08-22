@@ -19,16 +19,17 @@ MODEL_TYPES=(
     # qwen2_5
 )
 
-
 gsutil cp gs://delivery-rnd-colab/models/2410-combined.jsonl /tmp/data.jsonl
 DATASET_PATH=${DATASET_PATH:-/tmp/data.jsonl}
 
+# For a quick smoke test, you can override before running:
+#   DATASET_PATH=../one_example.jsonl bash train.sh
 
 export PYTHONPATH=$PYTHONPATH:$(pwd)/plugins  
 for i in "${!MODELS[@]}"; do
     MODEL="${MODELS[$i]}"
     MODEL_TYPE="${MODEL_TYPES[$i]}"
-    nproc_per_node=2
+    nproc_per_node=1
     MODEL_NAME=$(basename "$MODEL")
     OUTPUT_DIR=models/${MODEL_NAME}/2410-dft
     SAVE_STEPS=10
@@ -41,7 +42,7 @@ for i in "${!MODELS[@]}"; do
     fi
 
     PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
-    CUDA_VISIBLE_DEVICES=0,1 \
+    CUDA_VISIBLE_DEVICES=0 \
     NPROC_PER_NODE=$nproc_per_node \
     TORCHDYNAMO_RECOMPILE_LIMIT=16 \
     TORCHDYNAMO_CACHE_SIZE_LIMIT=16 \
@@ -49,12 +50,10 @@ for i in "${!MODELS[@]}"; do
     TORCHDYNAMO_CAPTURE_SCALAR_OUTPUTS=1 \
     swift sft \
         --model $MODEL \
-        --use_hf True \
-        --train_type lora \
         --model_type $MODEL_TYPE \
         --loss_type dft \
         --external_plugins plugins/dft_loss.py \
-        --dataset $DATASET_PATH \
+        --dataset "$DATASET_PATH" \
         --gradient_checkpointing_kwargs '{"use_reentrant": false}' \
         --torch_dtype bfloat16 \
         --num_train_epochs 1 \
@@ -74,17 +73,12 @@ for i in "${!MODELS[@]}"; do
         --logging_steps 5 \
         --max_length 15000 \
         --output_dir $OUTPUT_DIR \
-        --warmup_ratio 0.05 \
         --dataloader_num_workers 4 \
-        --truncation_strategy 'right' \
-        --torch_dtype bfloat16 \
         --seed 44 \
         --data_seed 44 \
         --split_dataset_ratio 0.05 \
-        --dataset_shuffle true \
         --report_to tensorboard \
         --logging_first_step true \
-        --logging_steps 1 \
         --attn_impl $ATTN_IMPL
 
     python3 lora_to_full.py $OUTPUT_DIR --last

@@ -4,7 +4,7 @@ MODELS=(
     # meta-llama/Llama-3.2-1B-Instruct
     # meta-llama/Llama-3.1-8B-Instruct
     # meta-llama/Llama-2-7b-chat-hf
-    google/gemma-3-1b-it
+    # google/gemma-3-1b-it
     # Qwen/Qwen3-4B
     # Qwen/Qwen2.5-3B-Instruct
 )
@@ -14,7 +14,7 @@ MODEL_TYPES=(
     # llama3_2
     # llama3_1
     # llama
-    gemma3_text
+    # gemma3_text
     # qwen3
     # qwen2_5
 )

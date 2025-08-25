@@ -41,7 +41,7 @@ for i in "${!MODELS[@]}"; do
     fi
 
     PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
-    CUDA_VISIBLE_DEVICES=0 \
+    CUDA_VISIBLE_DEVICES=0,1 \
     NPROC_PER_NODE=$nproc_per_node \
     TORCHDYNAMO_RECOMPILE_LIMIT=16 \
     TORCHDYNAMO_CACHE_SIZE_LIMIT=16 \
